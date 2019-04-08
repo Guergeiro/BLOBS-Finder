@@ -8,6 +8,7 @@
 #include <string.h>
 
 #define BUFFER_SIZE 32
+#define DELIM " \n"
 
 int lerFicheiro(char *nf, IMAGEM *img) {
 	FILE *file = fopen(nf, "r");
@@ -18,47 +19,47 @@ int lerFicheiro(char *nf, IMAGEM *img) {
 	char buf[BUFFER_SIZE];
 	char *aux;
 
-	while(!feof(file)) {
-		// Alocal nova img + espaco nome img
-		IMAGEM *new_image = malloc(sizeof(IMAGEM));
-
+	while (!feof(file)) {
 		// Nome img
 		fgets(buf, BUFFER_SIZE, file);
-		new_image->nome_img = malloc(strlen(buf) * sizeof(char));
-		strcpy(new_image->nome_img, buf);
+		img->nome_img = malloc(strlen(buf) * sizeof(char));
+		aux = strtok(buf, DELIM);
+		strcpy(img->nome_img, aux);
 
 		// linhas colunas canais
 		fgets(buf, BUFFER_SIZE, file);
-		aux = strtok(buf, " \n");
-		new_image->nlinhas = atoi(aux);
-		aux = strtok(NULL, " \n");
-		new_image->ncolunas = atoi(aux);
-		aux = strtok(NULL, " \n");
-		new_image->ncanais = atoi(aux);
+		aux = strtok(buf, DELIM);
+		img->nlinhas = atoi(aux);
+		aux = strtok(NULL, DELIM);
+		img->ncolunas = atoi(aux);
+		aux = strtok(NULL, DELIM);
+		img->ncanais = atoi(aux);
 
 		// Creates array Pixeis
-		new_image->array_pixeis = malloc(new_image->nlinhas * sizeof(PIXEL *));
-		for (uint row = 0; row < new_image->nlinhas; row++) {
-			new_image->array_pixeis[row] = malloc(new_image->ncolunas * sizeof(PIXEL));
+		img->array_pixeis = malloc(img->nlinhas * sizeof(PIXEL *));
+		for (uint row = 0; row < img->nlinhas; row++) {
+			img->array_pixeis[row] = malloc(img->ncolunas * sizeof(PIXEL));
 		}
 
 		// Populates array Pixeis
-		for (uint row = 0; row < new_image->nlinhas; row++) {
-			for (uint col = 0; col < new_image->ncolunas; col++) {
+		for (uint row = 0; row < img->nlinhas; row++) {
+			for (uint col = 0; col < img->ncolunas; col++) {
 				fgets(buf, BUFFER_SIZE, file);
-				new_image->array_pixeis[row][col].r = atoi(buf);
+				img->array_pixeis[row][col].r = atoi(buf);
 				fgets(buf, BUFFER_SIZE, file);
-				new_image->array_pixeis[row][col].g = atoi(buf);
+				img->array_pixeis[row][col].g = atoi(buf);
 				fgets(buf, BUFFER_SIZE, file);
-				new_image->array_pixeis[row][col].b = atoi(buf);
+				img->array_pixeis[row][col].b = atoi(buf);
 			}
 		}
 
+		// Alocal nova img + espaco nome img
+		IMAGEM *novaImg = malloc(sizeof(IMAGEM));
+
 		// Insere no inicio da lista
-		new_image->next = img;
-		img = new_image;
+		novaImg->next = img;
+		img = novaImg;
 	}
-	printf("%s\n", img->nome_img);
 
 	fclose(file);
 	return 1;
@@ -70,21 +71,16 @@ int calcularZonas(IMAGEM *Imag, int R, int G, int B, int D) {
 }
 
 void mostrarZonas(IMAGEM *Imag) {
-
 }
 
 void mostrarImagemComMaisZonas(void) {
-
 }
 
 void determinarDesvioPadrao(IMAGEM *Imag) {
-
 }
 
 void determinarZonaMenorDesvioPadraoImagem(void) {
-
 }
 
 void destruirImagem(IMAGEM *img) {
-
 }

@@ -3,6 +3,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "funcoes.h"
@@ -36,24 +37,15 @@ int main(int argc, char **argv) {
 	for (uint cont = 0; cont < argc; cont++)
 		printf("parametros[%d] = [%s]\n", cont, argv[cont]);
 
-	IMAGEM *img = NULL;
+	IMAGEM *img = malloc(sizeof(IMAGEM));
 	if (!strcmp(argv[7], "MENUS")) {
 		uint op;
 		do {
 			op = menu();
 			switch (op) {
 				case 1:
-
 					lerFicheiro(argv[2], img);
-					/*
-					IMAGEM *aux = img;
-					while (aux) {
-						for (uint row = 0; row < aux->nlinhas; row++) {
-							for (uint col = 0; col < aux->ncolunas; col++) {
-								printf("%u %u %u\n", aux->array_pixeis[row][col].r, aux->array_pixeis[row][col].g, aux->array_pixeis[row][col].b);
-							}
-						}
-					}*/
+					printf("%s\n", img->nome_img);
 					break;
 				case 2:
 					//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
