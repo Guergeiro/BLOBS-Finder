@@ -8,15 +8,37 @@
 
 #include "funcoes.h"
 
+#define BUFFER_SIZE 32
+
+IMAGEM *numeroImagens(char *nf) {
+	FILE *file = fopen(nf, "r");
+
+	if (!file)
+		return NULL;
+
+	char buf[BUFFER_SIZE];
+
+	uint nImagens = 0;
+	while (!feof(file)) {
+		fgets(buf, BUFFER_SIZE, file);
+		if (strstr(buf, ".jpg")) {
+			nImagens++;
+		}
+	}
+
+	IMAGEM *temp = malloc(nImagens * sizeof(IMAGEM));
+	printf("%d", sizeof(temp));
+	printf("%d", sizeof(IMAGEM));
+	return temp;
+}
+
 int menu() {
 	printf("1 - Ler de Ficheiro\n");
 	printf("2 - Calcular zonas (BLOB)\n");
 	printf("3 - Calcular zonas ordenadas pelo numero de pixeis\n");
 	printf("4 - Calcular imagem com mais zonas\n");
-	printf(
-			"5 - Determinar desvio padrão para todas as zonas calculadas para cada imagem\n");
-	printf(
-			"6 - Determinar qual a zona com menor desvio padrão e a que imagem corresponde\n");
+	printf("5 - Determinar desvio padrão para todas as zonas calculadas para cada imagem\n");
+	printf("6 - Determinar qual a zona com menor desvio padrão e a que imagem corresponde\n");
 	printf("0 - Sair \n");
 	printf("Qual a Opcao ");
 	int op;
@@ -39,24 +61,21 @@ int main(int argc, char **argv) {
 	for (uint cont = 0; cont < argc; cont++)
 		printf("parametros[%d] = [%s]\n", cont, argv[cont]);
 
-	IMAGEM *Imag = malloc(sizeof(IMAGEM));
+	IMAGEM *img = numeroImagens(argv[2]);
+	printf("%ld", sizeof(img) / sizeof(img[0]));
+
 	if (!strcmp(argv[7], "MENUS")) {
 		uint op;
 		do {
 			op = menu();
 			switch (op) {
 			case 1:
-				lerFicheiro(argv[2], Imag);
-				printf("%s\n", Imag[0].nome_img);
-				printf("%u %u %u\n", Imag[0].nlinhas, Imag[0].ncolunas,
-						Imag[0].ncanais);
-				for (uint row = 0; row < Imag[0].nlinhas; row++) {
-					for (uint col = 0; col < Imag[0].ncolunas; col++) {
-						printf("%u %u %u\n", Imag[0].array_pixeis[row][col].r,
-
-						Imag[0].array_pixeis[row][col].g,
-
-						Imag[0].array_pixeis[row][col].b);
+				lerFicheiro(argv[2], img);
+				printf("%s\n", img[0].nome_img);
+				printf("%u %u %u\n", img[0].nlinhas, img[0].ncolunas, img[0].ncanais);
+				for (uint row = 0; row < img[0].nlinhas; row++) {
+					for (uint col = 0; col < img[0].ncolunas; col++) {
+						printf("%u %u %u\n", img[0].array_pixeis[row][col].r, img[0].array_pixeis[row][col].g, img[0].array_pixeis[row][col].b);
 					}
 				}
 				break;
