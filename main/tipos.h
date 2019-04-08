@@ -17,11 +17,14 @@ typedef struct {
 // Hashing/Arvores de Pixeis
 } BLOB, ZONA;
 
-typedef struct {
+typedef struct imagem {
 	uint nlinhas, ncolunas, ncanais;
-	char *nome_img;
+	char nome_img[1];
 	PIXEL **array_pixeis;
 // Estrutura para guardar os BLOB/Zonas
+	struct imagem *next;
 } IMAGEM;
+
+
 
 #endif /* TIPOS_H_ */

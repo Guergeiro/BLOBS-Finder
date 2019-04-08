@@ -7,7 +7,7 @@
 
 #include "tipos.h"
 
-int lerFicheiro(char *nf, IMAGEM *Imag);
+int lerFicheiro(char *nf, IMAGEM *img);
 
 int calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
 

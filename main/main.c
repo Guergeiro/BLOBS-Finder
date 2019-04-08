@@ -3,34 +3,9 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "funcoes.h"
-
-#define BUFFER_SIZE 32
-
-IMAGEM *numeroImagens(char *nf) {
-	FILE *file = fopen(nf, "r");
-
-	if (!file)
-		return NULL;
-
-	char buf[BUFFER_SIZE];
-
-	uint nImagens = 0;
-	while (!feof(file)) {
-		fgets(buf, BUFFER_SIZE, file);
-		if (strstr(buf, ".jpg")) {
-			nImagens++;
-		}
-	}
-
-	IMAGEM *temp = malloc(nImagens * sizeof(IMAGEM));
-	printf("%d", sizeof(temp));
-	printf("%d", sizeof(IMAGEM));
-	return temp;
-}
 
 int menu() {
 	printf("1 - Ler de Ficheiro\n");
@@ -61,44 +36,45 @@ int main(int argc, char **argv) {
 	for (uint cont = 0; cont < argc; cont++)
 		printf("parametros[%d] = [%s]\n", cont, argv[cont]);
 
-	IMAGEM *img = numeroImagens(argv[2]);
-	printf("%ld", sizeof(img) / sizeof(img[0]));
-
+	IMAGEM *img = NULL;
 	if (!strcmp(argv[7], "MENUS")) {
 		uint op;
 		do {
 			op = menu();
 			switch (op) {
-			case 1:
-				lerFicheiro(argv[2], img);
-				printf("%s\n", img[0].nome_img);
-				printf("%u %u %u\n", img[0].nlinhas, img[0].ncolunas, img[0].ncanais);
-				for (uint row = 0; row < img[0].nlinhas; row++) {
-					for (uint col = 0; col < img[0].ncolunas; col++) {
-						printf("%u %u %u\n", img[0].array_pixeis[row][col].r, img[0].array_pixeis[row][col].g, img[0].array_pixeis[row][col].b);
-					}
-				}
-				break;
-			case 2:
-				//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
-				//mostrarZonas(IMAGEM *Imag);
-				break;
-			case 3:
+				case 1:
 
-				break;
-			case 4:
-				//mostrarImagemComMaisZonas(void);
-				break;
-			case 5:
-				//determinarDesvioPadrao(IMAGEM *Imag);
-				break;
-			case 6:
-				//determinarZonaMenorDesvioPadraoImagem(void);
-				break;
-			case 0:
-				break;
-			default:
-				printf("Opcao invalida\n");
+					lerFicheiro(argv[2], img);
+					/*
+					IMAGEM *aux = img;
+					while (aux) {
+						for (uint row = 0; row < aux->nlinhas; row++) {
+							for (uint col = 0; col < aux->ncolunas; col++) {
+								printf("%u %u %u\n", aux->array_pixeis[row][col].r, aux->array_pixeis[row][col].g, aux->array_pixeis[row][col].b);
+							}
+						}
+					}*/
+					break;
+				case 2:
+					//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
+					//mostrarZonas(IMAGEM *Imag);
+					break;
+				case 3:
+
+					break;
+				case 4:
+					//mostrarImagemComMaisZonas(void);
+					break;
+				case 5:
+					//determinarDesvioPadrao(IMAGEM *Imag);
+					break;
+				case 6:
+					//determinarZonaMenorDesvioPadraoImagem(void);
+					break;
+				case 0:
+					break;
+				default:
+					printf("Opcao invalida\n");
 			}
 		} while (op);
 	} else if (!strcmp(argv[7], "ALL")) {
