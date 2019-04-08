@@ -37,19 +37,19 @@ int main(int argc, char **argv) {
 	for (uint cont = 0; cont < argc; cont++)
 		printf("parametros[%d] = [%s]\n", cont, argv[cont]);
 
-	IMAGEM *img = malloc(sizeof(IMAGEM));
+	struct imagem *primeiraImagem = NULL;
 	if (!strcmp(argv[7], "MENUS")) {
 		uint op;
 		do {
 			op = menu();
 			switch (op) {
 				case 1:
-					lerFicheiro(argv[2], img);
-					printf("%s\n", img->nome_img);
+					lerFicheiro(argv[2], primeiraImagem);
+					printf("%s\n", primeiraImagem->next->nome_img);
 					break;
 				case 2:
-					//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
-					//mostrarZonas(IMAGEM *Imag);
+					calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+					mostrarZonas(primeiraImagem);
 					break;
 				case 3:
 
@@ -64,21 +64,23 @@ int main(int argc, char **argv) {
 					//determinarZonaMenorDesvioPadraoImagem(void);
 					break;
 				case 0:
+					destruirImagem(primeiraImagem);
 					break;
 				default:
 					printf("Opcao invalida\n");
 			}
 		} while (op);
 	} else if (!strcmp(argv[7], "ALL")) {
-		//lerFicheiro(char *nf, IMAGEM *Imag);
+		lerFicheiro(argv[2], primeiraImagem);
 		//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
 		//mostrarZonas(IMAGEM *Imag);
 		//mostrarImagemComMaisZonas(void);
 		//determinarDesvioPadrao(IMAGEM *Imag);
 		//determinarZonaMenorDesvioPadraoImagem(void);
-		//destruirImagem(IMAGEM *img);
+		destruirImagem(primeiraImagem);
 	} else if (!strcmp(argv[7], "MEM")) {
-
+		lerFicheiro(argv[2], primeiraImagem);
+		destruirImagem(primeiraImagem);
 	} else {
 		return 1;
 	}

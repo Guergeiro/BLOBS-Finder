@@ -7,24 +7,23 @@
 
 typedef unsigned int uint;
 
-typedef struct {
+struct pixel {
 	uint r, g, b;
-} PIXEL;
+	uint row, col;
+	struct pixel *next;
+};
 
-typedef struct {
-// Lista de Pixeis
-// Pilha/Fila de Pixeis
-// Hashing/Arvores de Pixeis
-} BLOB, ZONA;
+struct blob {
+	struct blob *next;
+	struct pixel *primeiroPixel;
+};
 
-typedef struct imagem {
+struct imagem {
 	uint nlinhas, ncolunas, ncanais;
 	char *nome_img;
-	PIXEL **array_pixeis;
-// Estrutura para guardar os BLOB/Zonas
+	struct pixel **array_pixeis;
+	struct blob *primeiroBlob;
 	struct imagem *next;
-} IMAGEM;
-
-
+};
 
 #endif /* TIPOS_H_ */
