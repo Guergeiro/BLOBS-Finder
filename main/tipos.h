@@ -19,7 +19,8 @@ typedef struct {
 
 typedef struct {
 	uint nlinhas, ncolunas, ncanais;
-// Estrutura para guardar os Pixeis;
+	char *nome_img;
+	PIXEL **array_pixeis;
 // Estrutura para guardar os BLOB/Zonas
 } IMAGEM;
 
