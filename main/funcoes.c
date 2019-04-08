@@ -19,44 +19,46 @@ int lerFicheiro(char *nf, IMAGEM *img) {
 	char *aux;
 
 	while(!feof(file)) {
+		// Alocal nova img + espaco nome img
+		IMAGEM *new_image = malloc(sizeof(IMAGEM));
+
 		// Nome img
 		fgets(buf, BUFFER_SIZE, file);
-
-		// Alocal nova img + espaco nome img
-		IMAGEM *new = malloc(sizeof(IMAGEM) + sizeof(char) * strlen(buf));
-		strncpy(new->nome_img, buf, strlen(buf) - 1);
+		new_image->nome_img = malloc(strlen(buf) * sizeof(char));
+		strcpy(new_image->nome_img, buf);
 
 		// linhas colunas canais
 		fgets(buf, BUFFER_SIZE, file);
 		aux = strtok(buf, " \n");
-		new->nlinhas = atoi(aux);
+		new_image->nlinhas = atoi(aux);
 		aux = strtok(NULL, " \n");
-		new->ncolunas = atoi(aux);
+		new_image->ncolunas = atoi(aux);
 		aux = strtok(NULL, " \n");
-		new->ncanais = atoi(aux);
+		new_image->ncanais = atoi(aux);
 
 		// Creates array Pixeis
-		new->array_pixeis = malloc(new->nlinhas * sizeof(PIXEL *));
-		for (uint row = 0; row < new->nlinhas; row++) {
-			new->array_pixeis[row] = malloc(new->ncolunas * sizeof(PIXEL));
+		new_image->array_pixeis = malloc(new_image->nlinhas * sizeof(PIXEL *));
+		for (uint row = 0; row < new_image->nlinhas; row++) {
+			new_image->array_pixeis[row] = malloc(new_image->ncolunas * sizeof(PIXEL));
 		}
 
 		// Populates array Pixeis
-		for (uint row = 0; row < new->nlinhas; row++) {
-			for (uint col = 0; col < new->ncolunas; col++) {
+		for (uint row = 0; row < new_image->nlinhas; row++) {
+			for (uint col = 0; col < new_image->ncolunas; col++) {
 				fgets(buf, BUFFER_SIZE, file);
-				new->array_pixeis[row][col].r = atoi(buf);
+				new_image->array_pixeis[row][col].r = atoi(buf);
 				fgets(buf, BUFFER_SIZE, file);
-				new->array_pixeis[row][col].g = atoi(buf);
+				new_image->array_pixeis[row][col].g = atoi(buf);
 				fgets(buf, BUFFER_SIZE, file);
-				new->array_pixeis[row][col].b = atoi(buf);
+				new_image->array_pixeis[row][col].b = atoi(buf);
 			}
 		}
 
 		// Insere no inicio da lista
-		new->next = img;
-		img = new;
+		new_image->next = img;
+		img = new_image;
 	}
+	printf("%s\n", img->nome_img);
 
 	fclose(file);
 	return 1;
