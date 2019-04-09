@@ -10,20 +10,23 @@
 #define BUFFER_SIZE 32
 #define DELIM " \n"
 
-int lerFicheiro(char *nf, struct imagem *primeiraImagem) {
+struct imagem *lerFicheiro(char *nf) {
 	FILE *file = fopen(nf, "r");
 	// Error open file
-	if (!file)
-		return 0;
+	if (!file) {
+		printf("Erro abrir ficheiro\n");
+		return NULL;
+	}
 
 	char buf[BUFFER_SIZE];
 	char *aux;
 
-	struct imagem *novaImg;
-
+	struct imagem *auxImg = NULL;
 	while (!feof(file)) {
-		// Alocal nova img
-		novaImg = malloc(sizeof(struct imagem));
+		// Alocar nova img
+		struct imagem *novaImg = malloc(sizeof(struct imagem));
+		if (auxImg)
+			novaImg->next = auxImg;
 
 		// Nome img
 		fgets(buf, BUFFER_SIZE, file);
@@ -62,49 +65,15 @@ int lerFicheiro(char *nf, struct imagem *primeiraImagem) {
 				novaImg->array_pixeis[row][col].col = col;
 			}
 		}
-
 		// Insere no inicio da lista
-		novaImg->next = primeiraImagem;
-		primeiraImagem = novaImg;
-
+		auxImg = novaImg;
 	}
-
 
 	fclose(file);
-	printf("%s\n", primeiraImagem->next->next->next->nome_img);
-	return 1;
+	return auxImg;
 }
 
-void inserirPixel(struct blob *blob, struct pixel pixel) {
-	// nao existem blobs
-	if (!blob) {
-		blob = malloc(sizeof(blob));
-		blob->primeiroPixel = &pixel;
-	} else {
-		struct pixel *aux = blob->primeiroPixel;
-		while (aux) {
-			// Pixel encontra-se na vizinhança
-			if (abs(aux->row - pixel.row) == 1 || abs(aux->col - pixel.col) == 1) {
-				// Insere no inicio da lista
-				pixel.next = blob->primeiroPixel;
-				blob->primeiroPixel = &pixel;
-				return;
-			}
-			aux = aux->next;
-		}
-	}
-
-	// Nao se enquadra em nenhum blob, necessario criar um novo
-	struct blob *novoBlob = malloc(sizeof(blob));
-	novoBlob->primeiroPixel = &pixel;
-
-	// Insere novoBlob inicio da lista
-	novoBlob->next = blob;
-	blob = novoBlob;
-
-}
-
-int calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
+void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
 		for (uint row = 0; row < aux->nlinhas; row++) {
@@ -122,19 +91,31 @@ int calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d)
 					continue;
 				}
 
-				inserirPixel(aux->primeiroBlob, aux->array_pixeis[row][col]);
-
 			}
 		}
 		aux = aux->next;
 	}
-	return 0;
 }
 
-void mostrarZonas(struct imagem *primeiraImagem) {
+void mostrarBlobs(struct blob *blob) {
+	if (blob->next) {
+		mostrarBlobs(blob->next);
+	}
+	struct pixel *aux = blob->primeiroPixel;
+	printf("[row][col]r g b\n");
+	while (aux) {
+		printf("[%u][%u]%u %u %u\n", aux->row, aux->col, aux->r, aux->g, aux->b);
+		aux = aux->next;
+	}
+}
+
+void mostrarImagens(struct imagem *primeiraImagem) {
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
 		printf("%s\n", aux->nome_img);
+		if (aux->primeiroBlob) {
+			mostrarBlobs(aux->primeiroBlob);
+		}
 		aux = aux->next;
 	}
 }

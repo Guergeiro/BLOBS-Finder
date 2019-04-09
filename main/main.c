@@ -44,11 +44,10 @@ int main(int argc, char **argv) {
 			op = menu();
 			switch (op) {
 				case 1:
-					lerFicheiro(argv[2], primeiraImagem);
-					printf("%s\n", primeiraImagem->next->nome_img);
+					primeiraImagem = lerFicheiro(argv[2]);
 					break;
 				case 2:
-					calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+					//calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 					mostrarZonas(primeiraImagem);
 					break;
 				case 3:
@@ -71,7 +70,7 @@ int main(int argc, char **argv) {
 			}
 		} while (op);
 	} else if (!strcmp(argv[7], "ALL")) {
-		lerFicheiro(argv[2], primeiraImagem);
+		lerFicheiro(argv[2]);
 		//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
 		//mostrarZonas(IMAGEM *Imag);
 		//mostrarImagemComMaisZonas(void);
@@ -79,7 +78,7 @@ int main(int argc, char **argv) {
 		//determinarZonaMenorDesvioPadraoImagem(void);
 		destruirImagem(primeiraImagem);
 	} else if (!strcmp(argv[7], "MEM")) {
-		lerFicheiro(argv[2], primeiraImagem);
+		lerFicheiro(argv[2]);
 		destruirImagem(primeiraImagem);
 	} else {
 		return 1;
