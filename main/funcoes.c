@@ -73,26 +73,38 @@ struct imagem *lerFicheiro(char *nf) {
 	return auxImg;
 }
 
+void pesquisarPixeis(struct pixel **array_pixeis, struct blob *blob, uint row, uint col, uint r, uint g, uint b, uint d) {
+	// Fails red
+	if (abs(array_pixeis[row][col].r - r) > d) {
+		return;
+	}
+	// Fails green
+	if (abs(array_pixeis[row][col].g - g) > d) {
+		return;
+	}
+	// Fails blue
+	if (abs(array_pixeis[row][col].b - b) > d) {
+		return;
+	}
+
+	// Already in blob
+
+	// Insert in blob
+
+	pesquisarPixeis(array_pixeis, blob, row--, col, r, g, b, d);
+	pesquisarPixeis(array_pixeis, blob, row++, col, r, g, b, d);
+	pesquisarPixeis(array_pixeis, blob, row, col--, r, g, b, d);
+	pesquisarPixeis(array_pixeis, blob, row, col++, r, g, b, d);
+}
+
 void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
-		for (uint row = 0; row < aux->nlinhas; row++) {
-			for (uint col = 0; col < aux->ncolunas; col++) {
-				// fails red deviation
-				if (abs(aux->array_pixeis[row][col].r - r) > d) {
-					continue;
-				}
-				// fails green deviation
-				if (abs(aux->array_pixeis[row][col].g - g) > d) {
-					continue;
-				}
-				// fails blue deviation
-				if (abs(aux->array_pixeis[row][col].b - b) > d) {
-					continue;
-				}
+		for(;;)
+			for (;;)
+				pesquisarPixeis(aux->array_pixeis, aux->primeiroBlob, 0,0,r,g,b,d);
 
-			}
-		}
+				// Create new blob
 		aux = aux->next;
 	}
 }
