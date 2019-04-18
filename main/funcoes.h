@@ -14,6 +14,29 @@
  */
 struct imagem *lerFicheiro(char *nf);
 
+/**
+ * Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
+ * @param pixel1 contêm as informações de um pixel
+ * @param pixel2 contêm as informações de um pixel
+ * @return 0 caso diferentes, !0 caso iguais
+ */
+int compararPixeis(const struct pixel pixel1, const struct pixel pixel2);
+
+/**
+ * Pesquisa se um dado pixel existe nos blobs de uma imagem
+ * Utiliza a função @see compararPixeis()
+ * @param *blob contêm ponteiro para o primeiro blob de uma imagem
+ * @param pixel contêm as informações do pixel que se quer pesquisar
+ * @return 1 caso exista, 0 caso não exista
+ */
+
+int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
+
+/**
+ * Pesquisa todos os pixeis adjacentes numa imagem
+ *
+ */
+void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d);
 
 /**
  * Calcula e insere as zonas para cada imagem
@@ -47,7 +70,5 @@ void determinarZonaMenorDesvioPadraoImagem(void);
 void destruirImagem(struct imagem *primeiraImagem);
 
 void destruirBlob(struct blob *blob);
-
-void destruirPixel(struct pixel *primeiroPixel);
 
 #endif /* FUNCOES_H_ */

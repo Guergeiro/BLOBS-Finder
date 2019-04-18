@@ -11,7 +11,7 @@
 #define DELIM " \n"
 
 struct imagem *lerFicheiro(char *nf) {
-	FILE *file = fopen(nf, "r");
+	FILE *file = fopen("/home/breno/Documents/BLOBS-Finder/Debug/imgs.txt", "r");
 	// Error open file
 	if (!file) {
 		printf("Erro abrir ficheiro\n");
@@ -25,6 +25,7 @@ struct imagem *lerFicheiro(char *nf) {
 	while (!feof(file)) {
 		// Alocar nova img
 		struct imagem *novaImg = malloc(sizeof(struct imagem));
+
 		if (auxImg)
 			novaImg->next = auxImg;
 
@@ -73,38 +74,66 @@ struct imagem *lerFicheiro(char *nf) {
 	return auxImg;
 }
 
-void pesquisarPixeis(struct pixel **array_pixeis, struct blob *blob, uint row, uint col, uint r, uint g, uint b, uint d) {
+int compararPixeis(const struct pixel pixel1, const struct pixel pixel2) {
+	return !(abs(pixel1.row - pixel2.row) || abs(pixel1.col - pixel2.col) || abs(pixel1.r - pixel2.r) || abs(pixel1.g - pixel2.g) || abs(pixel1.b - pixel2.b));
+}
+
+int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel) {
+	struct blob *aux_blob = blob;
+	struct pixel *aux_pixel;
+	while (aux_blob) {
+		aux_pixel = aux_blob->primeiroPixel;
+		while (aux_pixel) {
+			if (compararPixeis(*aux_pixel, pixel)) {
+				return 1;
+			}
+			aux_pixel = aux_pixel->next;
+		}
+		aux_blob = aux_blob->next;
+	}
+	return 0;
+}
+
+void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d) {
 	// Fails red
-	if (abs(array_pixeis[row][col].r - r) > d) {
+	if (abs(imagem->array_pixeis[row][col].r - r) > d) {
 		return;
 	}
 	// Fails green
-	if (abs(array_pixeis[row][col].g - g) > d) {
+	if (abs(imagem->array_pixeis[row][col].g - g) > d) {
 		return;
 	}
 	// Fails blue
-	if (abs(array_pixeis[row][col].b - b) > d) {
+	if (abs(imagem->array_pixeis[row][col].b - b) > d) {
 		return;
 	}
 
-	// Already in blob
+	if (!pesquisarPixelBlob(imagem->primeiroBlob, imagem->array_pixeis[row][col])) {
+		// Não está em nenhum Blob/não existem blobs. É necessário criar um e adidionar
+		struct blob *newBlob = malloc(sizeof(struct blob));
+		newBlob->primeiroPixel = &imagem->array_pixeis[row][col];
+		if (imagem->primeiroBlob) {
+			// Já existe um blob, insere no topo
+			newBlob->next = imagem->primeiroBlob;
+		}
+		imagem->primeiroBlob = newBlob;
+	}
 
-	// Insert in blob
-
-	pesquisarPixeis(array_pixeis, blob, row--, col, r, g, b, d);
-	pesquisarPixeis(array_pixeis, blob, row++, col, r, g, b, d);
-	pesquisarPixeis(array_pixeis, blob, row, col--, r, g, b, d);
-	pesquisarPixeis(array_pixeis, blob, row, col++, r, g, b, d);
+	// Pesquisa pixeis adjacentes
+	pesquisarPixeis(imagem, row--, col, r, g, b, d);
+	pesquisarPixeis(imagem, row++, col, r, g, b, d);
+	pesquisarPixeis(imagem, row, col--, r, g, b, d);
+	pesquisarPixeis(imagem, row, col++, r, g, b, d);
 }
 
 void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
-		for(;;)
-			for (;;)
-				pesquisarPixeis(aux->array_pixeis, aux->primeiroBlob, 0,0,r,g,b,d);
-
-				// Create new blob
+		for (uint row = 0; row < aux->nlinhas; row++) {
+			for (uint col = 0; col < aux->ncolunas; col++) {
+				pesquisarPixeis(aux, row, col, r, g, b, d);
+			}
+		}
 		aux = aux->next;
 	}
 }
@@ -159,14 +188,6 @@ void destruirImagem(struct imagem *primeiraImagem) {
 void destruirBlob(struct blob *blob) {
 	if (blob) {
 		destruirBlob(blob->next);
-		destruirPixel(blob->primeiroPixel);
 		free(blob);
-	}
-}
-
-void destruirPixel(struct pixel *pixel) {
-	if (pixel) {
-		destruirPixel(pixel->next);
-		free(pixel);
 	}
 }

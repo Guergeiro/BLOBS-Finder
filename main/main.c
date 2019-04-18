@@ -43,30 +43,30 @@ int main(int argc, char **argv) {
 		do {
 			op = menu();
 			switch (op) {
-				case 1:
-					primeiraImagem = lerFicheiro(argv[2]);
-					break;
-				case 2:
-					//calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
-					mostrarImagens(primeiraImagem);
-					break;
-				case 3:
+			case 1:
+				primeiraImagem = lerFicheiro(argv[2]);
+				break;
+			case 2:
+				//calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+				mostrarImagens(primeiraImagem);
+				break;
+			case 3:
 
-					break;
-				case 4:
-					//mostrarImagemComMaisZonas(void);
-					break;
-				case 5:
-					//determinarDesvioPadrao(IMAGEM *Imag);
-					break;
-				case 6:
-					//determinarZonaMenorDesvioPadraoImagem(void);
-					break;
-				case 0:
-					destruirImagem(primeiraImagem);
-					break;
-				default:
-					printf("Opcao invalida\n");
+				break;
+			case 4:
+				//mostrarImagemComMaisZonas(void);
+				break;
+			case 5:
+				//determinarDesvioPadrao(IMAGEM *Imag);
+				break;
+			case 6:
+				//determinarZonaMenorDesvioPadraoImagem(void);
+				break;
+			case 0:
+				destruirImagem(primeiraImagem);
+				break;
+			default:
+				printf("Opcao invalida\n");
 			}
 		} while (op);
 	} else if (!strcmp(argv[7], "ALL")) {
@@ -81,6 +81,23 @@ int main(int argc, char **argv) {
 		lerFicheiro(argv[2]);
 		destruirImagem(primeiraImagem);
 	} else {
+
+		// tests
+		struct pixel *pixel1 = malloc(sizeof(struct pixel));
+		pixel1->r = 255;
+		pixel1->g = 255;
+		pixel1->b = 255;
+		pixel1->row = 255;
+		pixel1->col = 255;
+
+		struct pixel pixel2;
+		pixel2.r = 255;
+		pixel2.g = 255;
+		pixel2.b = 255;
+		pixel2.row = 255;
+		pixel2.col = 255;
+
+		printf("%d\n", compararPixeis(*pixel1, pixel2));
 		return 1;
 	}
 }
