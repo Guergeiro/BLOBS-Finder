@@ -129,7 +129,7 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 			 * Estamos perante a primeira iteração da recursividade.
 			 * Cria-se um blob para os pixeis seguintes.
 			 */
-			blob = malloc(sizeof(struct blob));
+			blob = calloc(1,sizeof(struct blob));
 			blob->primeiroPixel = &imagem->array_pixeis[row][col];
 			if (imagem->primeiroBlob) {
 				// Já existe um blob, insere no inicio
@@ -142,10 +142,14 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 	imagem->array_pixeis[row][col].visitado = 1;
 
 	// Pesquisa pixeis adjacentes
-	pesquisarPixeis(imagem, row--, col, r, g, b, d, blob);
-	pesquisarPixeis(imagem, row++, col, r, g, b, d, blob);
-	pesquisarPixeis(imagem, row, col--, r, g, b, d, blob);
-	pesquisarPixeis(imagem, row, col++, r, g, b, d, blob);
+	if (row > 0)
+		pesquisarPixeis(imagem, row--, col, r, g, b, d, blob);
+	if (row < imagem->nlinhas)
+		pesquisarPixeis(imagem, row++, col, r, g, b, d, blob);
+	if (col > 0)
+		pesquisarPixeis(imagem, row, col--, r, g, b, d, blob);
+	if (col < imagem->ncolunas)
+		pesquisarPixeis(imagem, row, col++, r, g, b, d, blob);
 }
 
 void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
@@ -164,8 +168,8 @@ void mostrarBlobs(struct blob *blob) {
 	if (blob->next) {
 		mostrarBlobs(blob->next);
 	}
+	printf("Blob Comeca\n");
 	struct pixel *aux = blob->primeiroPixel;
-	printf("[row][col]r g b\n");
 	while (aux) {
 		printf("[%u][%u]%u %u %u\n", aux->row, aux->col, aux->r, aux->g, aux->b);
 		aux = aux->next;
@@ -176,6 +180,7 @@ void mostrarImagens(struct imagem *primeiraImagem) {
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
 		printf("%s\n", aux->nome_img);
+		printf("[row][col]r g b\n");
 		if (aux->primeiroBlob) {
 			mostrarBlobs(aux->primeiroBlob);
 		}

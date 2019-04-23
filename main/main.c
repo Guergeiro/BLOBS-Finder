@@ -22,9 +22,11 @@ int menu() {
 	return op;
 }
 
-void testarMem() {
+void testarMem(char *caminhoFicheiro) {
 	while (1) {
+		struct imagem *primeiraImagem = lerFicheiro(caminhoFicheiro);
 
+		destruirImagem(primeiraImagem);
 	}
 }
 
@@ -37,8 +39,8 @@ int main(int argc, char **argv) {
 	for (uint cont = 0; cont < argc; cont++)
 		printf("parametros[%d] = [%s]\n", cont, argv[cont]);
 
-	struct imagem *primeiraImagem = NULL;
 	if (!strcmp(argv[7], "MENUS")) {
+		struct imagem *primeiraImagem = NULL;
 		uint op;
 		do {
 			op = menu();
@@ -47,14 +49,14 @@ int main(int argc, char **argv) {
 				primeiraImagem = lerFicheiro(argv[2]);
 				break;
 			case 2:
-				//calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+				calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 				mostrarImagens(primeiraImagem);
 				break;
 			case 3:
 
 				break;
 			case 4:
-				//mostrarImagemComMaisZonas(void);
+				mostrarImagemComMaisZonas(primeiraImagem);
 				break;
 			case 5:
 				//determinarDesvioPadrao(IMAGEM *Imag);
@@ -70,34 +72,20 @@ int main(int argc, char **argv) {
 			}
 		} while (op);
 	} else if (!strcmp(argv[7], "ALL")) {
-		lerFicheiro(argv[2]);
-		//calcularZonas(IMAGEM *Imag, int R, int G, int B, int D);
-		//mostrarZonas(IMAGEM *Imag);
+		struct imagem *primeiraImagem = lerFicheiro(argv[2]);
+		calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		mostrarImagens(primeiraImagem);
+
+		mostrarImagemComMaisZonas(primeiraImagem);
 		//mostrarImagemComMaisZonas(void);
 		//determinarDesvioPadrao(IMAGEM *Imag);
 		//determinarZonaMenorDesvioPadraoImagem(void);
 		destruirImagem(primeiraImagem);
 	} else if (!strcmp(argv[7], "MEM")) {
-		lerFicheiro(argv[2]);
-		destruirImagem(primeiraImagem);
+		testarMem(argv[2]);
 	} else {
-
+		printf("Opcao invalida. Escolhas: MENUS, ALL, MEM");
 		// tests
-		struct pixel *pixel1 = malloc(sizeof(struct pixel));
-		pixel1->r = 255;
-		pixel1->g = 255;
-		pixel1->b = 255;
-		pixel1->row = 255;
-		pixel1->col = 255;
-
-		struct pixel pixel2;
-		pixel2.r = 255;
-		pixel2.g = 255;
-		pixel2.b = 255;
-		pixel2.row = 255;
-		pixel2.col = 255;
-
-		printf("%d\n", compararPixeis(*pixel1, pixel2));
-		return 1;
 	}
+	return 1;
 }
