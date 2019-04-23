@@ -14,8 +14,24 @@
 - Utiliza função **compararPixeis()**
 - return: 1 caso exista, 0 caso não exista
 
-### calcularZonas
-- Devido a umas exceções, o algoritmo vai ter de ser alterado.
+### pesquisarPixeis (Done)
+- Pesquisa recursivamente todos os pixeis adjacentes a um dado pixel
+- Utiliza função **pesquisarPixelBlob (Done)**
+
+### calcularZonas (Done)
+- Calcula e insere as zonas para cada imagem
+- Utiliza função **pesquisarPixeis**
+
+### mostrarBlobs (Done)
+- Mostra todos os blobs na lista de blobs (recursivamente)
+
+### mostrarImagens (Done)
+- Mostra todas as imagens na lista de imagens
+- Utiliza função **mostrarBlobs**
+
+### mostrarImagensComMaisZonas (Done)
+- Calcula e mostra a imagem com mais zonas
+- Utiliza função **mostrarImagem**
 
 ### destruirBlob (Done)
 - Itera recursivamente por todos os blobs e dá free

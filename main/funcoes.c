@@ -64,6 +64,9 @@ struct imagem *lerFicheiro(char *nf) {
 				// Saves pixel location
 				novaImg->array_pixeis[row][col].row = row;
 				novaImg->array_pixeis[row][col].col = col;
+
+				// Sets "visitado" to 0
+				novaImg->array_pixeis[row][col].visitado = 0;
 			}
 		}
 		// Insere no inicio da lista
@@ -94,7 +97,11 @@ int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel) {
 	return 0;
 }
 
-void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d) {
+void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d, struct blob *blob) {
+	// If pixel was already visited
+	if (imagem->array_pixeis[row][col].visitado) {
+		return;
+	}
 	// Fails red
 	if (abs(imagem->array_pixeis[row][col].r - r) > d) {
 		return;
@@ -109,21 +116,36 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 	}
 
 	if (!pesquisarPixelBlob(imagem->primeiroBlob, imagem->array_pixeis[row][col])) {
-		// Não está em nenhum Blob/não existem blobs. É necessário criar um e adidionar
-		struct blob *newBlob = malloc(sizeof(struct blob));
-		newBlob->primeiroPixel = &imagem->array_pixeis[row][col];
-		if (imagem->primeiroBlob) {
-			// Já existe um blob, insere no topo
-			newBlob->next = imagem->primeiroBlob;
+		// Não está em nenhum blob/não existem blobs.
+		if (blob) {
+			/*
+			 * Estamos perante um pesquisa de profundidade de recursividade.
+			 * Adicionamos o pixel ao blob (inicio).
+			 */
+			imagem->array_pixeis[row][col].next = blob->primeiroPixel;
+			blob->primeiroPixel = &imagem->array_pixeis[row][col];
+		} else {
+			/*
+			 * Estamos perante a primeira iteração da recursividade.
+			 * Cria-se um blob para os pixeis seguintes.
+			 */
+			blob = malloc(sizeof(struct blob));
+			blob->primeiroPixel = &imagem->array_pixeis[row][col];
+			if (imagem->primeiroBlob) {
+				// Já existe um blob, insere no inicio
+				blob->next = imagem->primeiroBlob;
+			}
+			imagem->primeiroBlob = blob;
 		}
-		imagem->primeiroBlob = newBlob;
 	}
+	// Torna pixel já visitado
+	imagem->array_pixeis[row][col].visitado = 1;
 
 	// Pesquisa pixeis adjacentes
-	pesquisarPixeis(imagem, row--, col, r, g, b, d);
-	pesquisarPixeis(imagem, row++, col, r, g, b, d);
-	pesquisarPixeis(imagem, row, col--, r, g, b, d);
-	pesquisarPixeis(imagem, row, col++, r, g, b, d);
+	pesquisarPixeis(imagem, row--, col, r, g, b, d, blob);
+	pesquisarPixeis(imagem, row++, col, r, g, b, d, blob);
+	pesquisarPixeis(imagem, row, col--, r, g, b, d, blob);
+	pesquisarPixeis(imagem, row, col++, r, g, b, d, blob);
 }
 
 void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
@@ -131,7 +153,7 @@ void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d
 	while (aux) {
 		for (uint row = 0; row < aux->nlinhas; row++) {
 			for (uint col = 0; col < aux->ncolunas; col++) {
-				pesquisarPixeis(aux, row, col, r, g, b, d);
+				pesquisarPixeis(aux, row, col, r, g, b, d, NULL);
 			}
 		}
 		aux = aux->next;
@@ -161,7 +183,23 @@ void mostrarImagens(struct imagem *primeiraImagem) {
 	}
 }
 
-void mostrarImagemComMaisZonas(void) {
+void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
+	struct imagem *maiorImagem = NULL, *auxImagem = primeiraImagem;
+	uint somaMaior = 0, somaAux;
+	struct blob *blobAux = NULL;
+	while (auxImagem) {
+		for (somaAux = 0, blobAux = auxImagem->primeiroBlob; blobAux; somaAux++, blobAux = blobAux->next)
+			;
+		if (somaAux > somaMaior) {
+			somaMaior = somaAux;
+			maiorImagem = auxImagem;
+		}
+		auxImagem = auxImagem->next;
+	}
+	printf("%s\n", maiorImagem->nome_img);
+	if (maiorImagem->primeiroBlob) {
+		mostrarBlobs(maiorImagem->primeiroBlob);
+	}
 }
 
 void determinarDesvioPadrao(struct imagem *primeiraImagem) {

@@ -34,9 +34,17 @@ int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
 
 /**
  * Pesquisa todos os pixeis adjacentes numa imagem
- *
+ * Utiliza função @see pesquisarPixelBlob()
+ * @param *imagem contêm ponteiro para a imagem que estamos a tratar
+ * @param row contêm a linha do pixel atual
+ * @param col contêm a coluna do pixel atual
+ * @param r contêm o valor do canal Red que devemos considerar
+ * @param g contêm o valor do canal Green que devemos considerar
+ * @param b contêm o valor do canal Blue que devemos considerar
+ * @param d contêm o valor de desvio que devemos considerar para todos os canais
+ * @param *blob contêm ponteiro para o blob a que estamos adicionar, NULL caso seja o primeiro pixel a pesquisar
  */
-void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d);
+void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d, struct blob *blob);
 
 /**
  * Calcula e insere as zonas para cada imagem
@@ -61,7 +69,12 @@ void mostrarBlobs(struct blob *blob);
  */
 void mostrarImagens(struct imagem *primeiraImagem);
 
-void mostrarImagemComMaisZonas(void);
+/**
+ * Mostra a imagem com mais zonas (blobs)
+ * Utiliza a função @see mostrarImagens()
+ * @param *primeiraImagem contêm o pointeiro para a primeira imagem da lista de imagens
+ */
+void mostrarImagemComMaisZonas(struct imagem *primeiraImagem);
 
 void determinarDesvioPadrao(struct imagem *primeiraImagem);
 

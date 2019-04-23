@@ -10,6 +10,7 @@ typedef unsigned int uint;
 struct pixel {
 	uint r, g, b;
 	uint row, col;
+	uint visitado;
 	struct pixel *next;
 };
 
