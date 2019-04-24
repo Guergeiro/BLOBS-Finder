@@ -16,6 +16,7 @@ struct pixel {
 
 struct blob {
 	uint npixeis;
+	double desvioRed, desvioGreen, desvioBlue;
 	struct blob *next;
 	struct pixel *primeiroPixel;
 };

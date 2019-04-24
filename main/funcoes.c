@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #define BUFFER_SIZE 32
 #define DELIM " \n"
@@ -45,7 +46,7 @@ struct imagem *lerFicheiro(char *nf) {
 		novaImg->ncanais = atoi(aux);
 
 		// Creates array Pixeis
-		novaImg->array_pixeis = calloc(novaImg->nlinhas,  sizeof(struct pixel *));
+		novaImg->array_pixeis = calloc(novaImg->nlinhas, sizeof(struct pixel *));
 		for (uint row = 0; row < novaImg->nlinhas; row++) {
 			novaImg->array_pixeis[row] = calloc(novaImg->ncolunas, sizeof(struct pixel));
 		}
@@ -210,9 +211,63 @@ void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
 }
 
 void determinarDesvioPadrao(struct imagem *primeiraImagem) {
+	struct imagem *auxImagem = primeiraImagem;
+	struct blob *auxBlob = NULL;
+	struct pixel *auxPixel = NULL;
+
+	// Calculates std.deviation
+	double sumRed = 0, sumGreen = 0, sumBlue = 0;
+	double meanRed, meanGreen, meanBlue;
+	double stdRed = 0, stdGreen = 0, stdBlue = 0;
+
+	while (auxImagem) {
+		auxBlob = auxImagem->primeiroBlob;
+		while (auxBlob) {
+			auxPixel = auxBlob->primeiroPixel;
+			// Sum
+			while (auxPixel) {
+				sumRed += auxPixel->r;
+				sumGreen += auxPixel->g;
+				sumBlue += auxPixel->b;
+				auxPixel = auxPixel->next;
+			}
+			// Mean
+			meanRed = sumRed / auxBlob->npixeis;
+			meanGreen = sumGreen / auxBlob->npixeis;
+			meanBlue = sumBlue / auxBlob->npixeis;
+
+			// StdRed
+			auxPixel = auxBlob->primeiroPixel;
+			while (auxPixel) {
+				stdRed += pow(auxPixel->r - meanRed, 2);
+				stdGreen += pow(auxPixel->g - meanGreen, 2);
+				stdBlue += pow(auxPixel->b - meanBlue, 2);
+				auxPixel = auxPixel->next;
+			}
+			auxBlob->desvioRed = sqrt(stdRed / auxBlob->npixeis);
+			auxBlob->desvioGreen = sqrt(stdGreen / auxBlob->npixeis);
+			auxBlob->desvioBlue = sqrt(stdBlue / auxBlob->npixeis);
+			auxBlob = auxBlob->next;
+		}
+		auxImagem = auxImagem->next;
+	}
+
+	auxImagem = primeiraImagem;
+	auxBlob = NULL;
+
+	// Prints std.deviation
+	while (auxImagem) {
+		auxBlob = auxImagem->primeiroBlob;
+		while (auxBlob) {
+			printf("%s - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->desvioRed, auxBlob->desvioGreen, auxBlob->desvioBlue);
+			auxBlob = auxBlob->next;
+		}
+		auxImagem = auxImagem->next;
+	}
 }
 
 void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
+
 }
 
 void destruirImagem(struct imagem *primeiraImagem) {

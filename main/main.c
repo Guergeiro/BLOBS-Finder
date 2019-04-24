@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
 				mostrarImagemComMaisZonas(primeiraImagem);
 				break;
 			case 5:
-				//determinarDesvioPadrao(IMAGEM *Imag);
+				determinarDesvioPadrao(primeiraImagem);
 				break;
 			case 6:
 				//determinarZonaMenorDesvioPadraoImagem(void);
