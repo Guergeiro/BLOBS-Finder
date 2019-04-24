@@ -203,8 +203,8 @@ void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
 		auxImagem = auxImagem->next;
 	}
 	if (maiorImagem->primeiroBlob) {
-		printf("%s - %u blobs\n", maiorImagem->nome_img, maiorImagem->nblobs);
 		mostrarBlobs(maiorImagem->primeiroBlob);
+		printf("%s - %u blobs\n", maiorImagem->nome_img, maiorImagem->nblobs);
 	}
 }
 
