@@ -26,6 +26,7 @@ void testarMem(char **argv) {
 	while (1) {
 		struct imagem *primeiraImagem = lerFicheiro(argv[2]);
 		calcularZonas(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		determinarDesvioPadrao(primeiraImagem);
 		destruirImagem(primeiraImagem);
 	}
 }
@@ -62,7 +63,7 @@ int main(int argc, char **argv) {
 				determinarDesvioPadrao(primeiraImagem);
 				break;
 			case 6:
-				//determinarZonaMenorDesvioPadraoImagem(void);
+				determinarZonaMenorDesvioPadraoImagem(primeiraImagem);
 				break;
 			case 0:
 				destruirImagem(primeiraImagem);
@@ -78,8 +79,8 @@ int main(int argc, char **argv) {
 
 		mostrarImagemComMaisZonas(primeiraImagem);
 		//mostrarImagemComMaisZonas(void);
-		//determinarDesvioPadrao(IMAGEM *Imag);
-		//determinarZonaMenorDesvioPadraoImagem(void);
+		determinarDesvioPadrao(primeiraImagem);
+		determinarZonaMenorDesvioPadraoImagem(primeiraImagem);
 		destruirImagem(primeiraImagem);
 	} else if (!strcmp(argv[7], "MEM")) {
 		testarMem(argv);
