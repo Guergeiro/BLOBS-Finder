@@ -138,6 +138,7 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 			imagem->primeiroBlob = blob;
 			imagem->nblobs++;
 		}
+		blob->npixeis++;
 	}
 	// Torna pixel já visitado
 	imagem->array_pixeis[row][col].visitado = 1;
@@ -180,7 +181,7 @@ void mostrarBlobs(struct blob *blob) {
 void mostrarImagens(struct imagem *primeiraImagem) {
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
-		printf("%s\n", aux->nome_img);
+		printf("[%s] - ", aux->nome_img);
 		printf("[row][col]r g b\n");
 		if (aux->primeiroBlob) {
 			mostrarBlobs(aux->primeiroBlob);
