@@ -11,7 +11,7 @@
 #define DELIM " \n"
 
 struct imagem *lerFicheiro(char *nf) {
-	FILE *file = fopen("/home/breno/Documents/BLOBS-Finder/Debug/imgs.txt", "r");
+	FILE *file = fopen(nf, "r");
 	// Error open file
 	if (!file) {
 		printf("Erro abrir ficheiro\n");
