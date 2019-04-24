@@ -76,9 +76,17 @@ void mostrarImagens(struct imagem *primeiraImagem);
  */
 void mostrarImagemComMaisZonas(struct imagem *primeiraImagem);
 
+/**
+ * Para todas as imagens, determina e mostra o desvio padrão
+ * @param *primeiraImagem contêm o ponteiro para a primeira imagem da lista de imagens
+ */
 void determinarDesvioPadrao(struct imagem *primeiraImagem);
 
-void determinarZonaMenorDesvioPadraoImagem(void);
+/**
+ * Para todas as imagens, determina e mostra a imagem com menor desvio padrão
+ * @param *primeiraImagem contêm o ponteiro para a primeira imagem da lista de imagens
+ */
+void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem);
 
 void destruirImagem(struct imagem *primeiraImagem);
 
