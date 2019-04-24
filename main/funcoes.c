@@ -211,7 +211,7 @@ void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
 void determinarDesvioPadrao(struct imagem *primeiraImagem) {
 }
 
-void determinarZonaMenorDesvioPadraoImagem(void) {
+void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 }
 
 void destruirImagem(struct imagem *primeiraImagem) {
