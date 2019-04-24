@@ -248,6 +248,8 @@ void determinarDesvioPadrao(struct imagem *primeiraImagem) {
 			auxBlob->desvioGreen = sqrt(stdGreen / auxBlob->npixeis);
 			auxBlob->desvioBlue = sqrt(stdBlue / auxBlob->npixeis);
 			auxBlob = auxBlob->next;
+			// Resetar valores
+			sumRed = 0, sumGreen = 0, sumBlue = 0, stdRed = 0, stdGreen = 0, stdBlue = 0;
 		}
 		auxImagem = auxImagem->next;
 	}
