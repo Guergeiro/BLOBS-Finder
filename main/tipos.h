@@ -20,7 +20,7 @@ struct blob {
 };
 
 struct imagem {
-	uint nlinhas, ncolunas, ncanais;
+	uint nlinhas, ncolunas, ncanais, nblobs;
 	char *nome_img;
 	struct pixel **array_pixeis;
 	struct blob *primeiroBlob;

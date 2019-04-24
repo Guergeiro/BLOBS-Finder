@@ -14,8 +14,7 @@
 - Utiliza função **compararPixeis()**
 - return: 1 caso exista, 0 caso não exista
 
-### pesquisarPixeis (Not Done)
-- ***FUNÇÃO ESTÁ A CRIAR UM BLOB PARA CADA PIXEL***
+### pesquisarPixeis (Done)
 - Pesquisa recursivamente todos os pixeis adjacentes a um dado pixel
 - Utiliza função **pesquisarPixelBlob()**
 

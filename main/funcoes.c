@@ -24,7 +24,7 @@ struct imagem *lerFicheiro(char *nf) {
 	struct imagem *auxImg = NULL;
 	while (!feof(file)) {
 		// Alocar nova img
-		struct imagem *novaImg = malloc(sizeof(struct imagem));
+		struct imagem *novaImg = calloc(1, sizeof(struct imagem));
 
 		if (auxImg)
 			novaImg->next = auxImg;
@@ -45,9 +45,9 @@ struct imagem *lerFicheiro(char *nf) {
 		novaImg->ncanais = atoi(aux);
 
 		// Creates array Pixeis
-		novaImg->array_pixeis = malloc(novaImg->nlinhas * sizeof(struct pixel *));
+		novaImg->array_pixeis = calloc(novaImg->nlinhas,  sizeof(struct pixel *));
 		for (uint row = 0; row < novaImg->nlinhas; row++) {
-			novaImg->array_pixeis[row] = malloc(novaImg->ncolunas * sizeof(struct pixel));
+			novaImg->array_pixeis[row] = calloc(novaImg->ncolunas, sizeof(struct pixel));
 		}
 
 		// Populates array Pixeis
@@ -129,13 +129,14 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 			 * Estamos perante a primeira iteração da recursividade.
 			 * Cria-se um blob para os pixeis seguintes.
 			 */
-			blob = calloc(1,sizeof(struct blob));
+			blob = calloc(1, sizeof(struct blob));
 			blob->primeiroPixel = &imagem->array_pixeis[row][col];
 			if (imagem->primeiroBlob) {
 				// Já existe um blob, insere no inicio
 				blob->next = imagem->primeiroBlob;
 			}
 			imagem->primeiroBlob = blob;
+			imagem->nblobs++;
 		}
 	}
 	// Torna pixel já visitado
@@ -143,13 +144,13 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 
 	// Pesquisa pixeis adjacentes
 	if (row > 0)
-		pesquisarPixeis(imagem, row--, col, r, g, b, d, blob);
-	if (row < imagem->nlinhas)
-		pesquisarPixeis(imagem, row++, col, r, g, b, d, blob);
+		pesquisarPixeis(imagem, row - 1, col, r, g, b, d, blob);
+	if (row < imagem->nlinhas - 1)
+		pesquisarPixeis(imagem, row + 1, col, r, g, b, d, blob);
 	if (col > 0)
-		pesquisarPixeis(imagem, row, col--, r, g, b, d, blob);
-	if (col < imagem->ncolunas)
-		pesquisarPixeis(imagem, row, col++, r, g, b, d, blob);
+		pesquisarPixeis(imagem, row, col - 1, r, g, b, d, blob);
+	if (col < imagem->ncolunas - 1)
+		pesquisarPixeis(imagem, row, col + 1, r, g, b, d, blob);
 }
 
 void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
@@ -201,8 +202,8 @@ void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
 		}
 		auxImagem = auxImagem->next;
 	}
-	printf("%s\n", maiorImagem->nome_img);
 	if (maiorImagem->primeiroBlob) {
+		printf("%s - %u blobs\n", maiorImagem->nome_img, maiorImagem->nblobs);
 		mostrarBlobs(maiorImagem->primeiroBlob);
 	}
 }
