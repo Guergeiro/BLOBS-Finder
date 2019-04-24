@@ -39,4 +39,11 @@
 ### destruirImagem (Done)
 - Itera recursivamente por todas as imagens e dá free
 - Utiliza função **destruirBlob()**
-- Func dde destruir imagens feita.
+- Func de destruir imagens feita.
+
+### mediaDesvioPadrao (Done)
+- Passado um blob como parametro calcula a média dos desvios padroes dos canais rgb e devolve o valor.
+
+### determinarZonaMenorDesvioPadraoImagem (Done)
+- Percorre todos os blobs 
+- Determina o blob com menor media de desvio padrao
