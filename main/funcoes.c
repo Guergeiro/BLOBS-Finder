@@ -284,7 +284,7 @@ void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 		auxBlob = auxImagem->primeiroBlob;
 		while (auxBlob) {
 			auxStdDev = mediaDesvioPadrao(auxBlob);
-			if (auxStdDev <= minStdDev) {
+			if (auxStdDev < minStdDev) {
 				minStdDevBlob = auxBlob;
 				minStdDev = auxStdDev;
 				nome_img = auxImagem->nome_img;
