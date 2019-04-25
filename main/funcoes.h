@@ -47,14 +47,14 @@ int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
 void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d, struct blob *blob);
 
 /**
- * Calcula e insere as zonas para cada imagem
+ * Calcula e insere os blobs para cada imagem
  * @param *primeiraImagem contêm o ponteiro para a primeira imagem da lista de imagens
- * @param r valor Red a ser considerado para calcular uma Zona
- * @param g valor Green a ser considerado para calcular uma Zona
- * @param b valor Blue a ser considerado para calcular uma Zona
- * @param d valor Desvio a ser considerado para calcular uma Zona
+ * @param r valor Red a ser considerado para calcular um Blob
+ * @param g valor Green a ser considerado para calcular um Blob
+ * @param b valor Blue a ser considerado para calcular um Blob
+ * @param d valor Desvio a ser considerado para calcular um Blob
  */
-void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d);
+void calcularBlobs(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d);
 
 /**
  * Mostra todos os blobs na lista de blobs
@@ -70,11 +70,11 @@ void mostrarBlobs(struct blob *blob);
 void mostrarImagens(struct imagem *primeiraImagem);
 
 /**
- * Mostra a imagem com mais zonas (blobs)
+ * Mostra a imagem com mais blobs
  * Utiliza a função @see mostrarImagens()
  * @param *primeiraImagem contêm o pointeiro para a primeira imagem da lista de imagens
  */
-void mostrarImagemComMaisZonas(struct imagem *primeiraImagem);
+void mostrarImagemComMaisBlobs(struct imagem *primeiraImagem);
 
 /**
  * Para todas as imagens, determina e mostra o desvio padrão
@@ -83,10 +83,17 @@ void mostrarImagemComMaisZonas(struct imagem *primeiraImagem);
 void determinarDesvioPadrao(struct imagem *primeiraImagem);
 
 /**
- * Para todas as imagens, determina e mostra a imagem com menor desvio padrão
+ * Dado um blob, determina o desvio padrão médio do mesmo (Red + Green + Blue)
+ * @param *blob contêm o ponteiro para o blob
+ * @return valor do desvio padrão médio
+ */
+double mediaDesvioPadrao(struct blob *blob);
+
+/**
+ * Para todas as imagens, determina e mostra a imagem com menor desvio padrão blob
  * @param *primeiraImagem contêm o ponteiro para a primeira imagem da lista de imagens
  */
-void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem);
+void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem);
 
 void destruirImagem(struct imagem *primeiraImagem);
 

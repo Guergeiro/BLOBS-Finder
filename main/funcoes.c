@@ -65,9 +65,6 @@ struct imagem *lerFicheiro(char *nf) {
 				// Saves pixel location
 				novaImg->array_pixeis[row][col].row = row;
 				novaImg->array_pixeis[row][col].col = col;
-
-				// Sets "visitado" to 0
-				novaImg->array_pixeis[row][col].visitado = 0;
 			}
 		}
 		// Insere no inicio da lista
@@ -155,7 +152,11 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 		pesquisarPixeis(imagem, row, col + 1, r, g, b, d, blob);
 }
 
-void calcularZonas(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
+void calcularBlobs(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
+	if (!primeiraImagem) {
+		// Não existem imagens
+		return;
+	}
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
 		for (uint row = 0; row < aux->nlinhas; row++) {
@@ -180,6 +181,10 @@ void mostrarBlobs(struct blob *blob) {
 }
 
 void mostrarImagens(struct imagem *primeiraImagem) {
+	if (!primeiraImagem) {
+		// Não existem imagens
+		return;
+	}
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
 		printf("[%s] - ", aux->nome_img);
@@ -191,7 +196,11 @@ void mostrarImagens(struct imagem *primeiraImagem) {
 	}
 }
 
-void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
+void mostrarImagemComMaisBlobs(struct imagem *primeiraImagem) {
+	if (!primeiraImagem) {
+		// Não existem imagens
+		return;
+	}
 	struct imagem *maiorImagem = NULL, *auxImagem = primeiraImagem;
 	uint somaMaior = 0, somaAux;
 	struct blob *blobAux = NULL;
@@ -211,14 +220,16 @@ void mostrarImagemComMaisZonas(struct imagem *primeiraImagem) {
 }
 
 void determinarDesvioPadrao(struct imagem *primeiraImagem) {
+	if (!primeiraImagem) {
+		// Não existem imagens
+		return;
+	}
 	struct imagem *auxImagem = primeiraImagem;
 	struct blob *auxBlob = NULL;
 	struct pixel *auxPixel = NULL;
 
 	// Calculates std.deviation
-	double sumRed = 0, sumGreen = 0, sumBlue = 0;
-	double meanRed, meanGreen, meanBlue;
-	double stdRed = 0, stdGreen = 0, stdBlue = 0;
+	double sumRed = 0, sumGreen = 0, sumBlue = 0, stdRed = 0, stdGreen = 0, stdBlue = 0;
 
 	while (auxImagem) {
 		auxBlob = auxImagem->primeiroBlob;
@@ -231,17 +242,12 @@ void determinarDesvioPadrao(struct imagem *primeiraImagem) {
 				sumBlue += auxPixel->b;
 				auxPixel = auxPixel->next;
 			}
-			// Mean
-			meanRed = sumRed / auxBlob->npixeis;
-			meanGreen = sumGreen / auxBlob->npixeis;
-			meanBlue = sumBlue / auxBlob->npixeis;
-
 			// StdRed
 			auxPixel = auxBlob->primeiroPixel;
 			while (auxPixel) {
-				stdRed += pow(auxPixel->r - meanRed, 2);
-				stdGreen += pow(auxPixel->g - meanGreen, 2);
-				stdBlue += pow(auxPixel->b - meanBlue, 2);
+				stdRed += pow(auxPixel->r - (sumRed / auxBlob->npixeis), 2);
+				stdGreen += pow(auxPixel->g - (sumGreen / auxBlob->npixeis), 2);
+				stdBlue += pow(auxPixel->b - (sumBlue / auxBlob->npixeis), 2);
 				auxPixel = auxPixel->next;
 			}
 			auxBlob->desvioRed = sqrt(stdRed / auxBlob->npixeis);
@@ -261,7 +267,8 @@ void determinarDesvioPadrao(struct imagem *primeiraImagem) {
 	while (auxImagem) {
 		auxBlob = auxImagem->primeiroBlob;
 		while (auxBlob) {
-			printf("%s - [%u,%u] - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->primeiroPixel->row, auxBlob->primeiroPixel->col,auxBlob->desvioRed, auxBlob->desvioGreen, auxBlob->desvioBlue);
+			printf("%s - [%u,%u] - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->primeiroPixel->row, auxBlob->primeiroPixel->col, auxBlob->desvioRed,
+					auxBlob->desvioGreen, auxBlob->desvioBlue);
 			auxBlob = auxBlob->next;
 		}
 		auxImagem = auxImagem->next;
@@ -272,13 +279,14 @@ double mediaDesvioPadrao(struct blob *blob) {
 	return sqrt((blob->desvioRed + blob->desvioGreen + blob->desvioBlue) / blob->npixeis);
 }
 
-void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
-	struct imagem *auxImagem = primeiraImagem;
-	struct blob *auxBlob = NULL;
-	struct blob *minStdDevBlob = auxImagem->primeiroBlob;
-	double minStdDev = mediaDesvioPadrao(minStdDevBlob);
-	double auxStdDev = 0;
-	char *nome_img = auxImagem->nome_img;
+void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
+	if (!primeiraImagem) {
+		// Não existem imagens
+		return;
+	}
+	struct imagem *auxImagem = primeiraImagem->next, *minStdDevImagem = primeiraImagem;
+	struct blob *auxBlob = NULL, *minStdDevBlob = primeiraImagem->primeiroBlob;
+	double minStdDev = mediaDesvioPadrao(minStdDevBlob), auxStdDev;
 
 	while (auxImagem) {
 		auxBlob = auxImagem->primeiroBlob;
@@ -287,14 +295,15 @@ void determinarZonaMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 			if (auxStdDev < minStdDev) {
 				minStdDevBlob = auxBlob;
 				minStdDev = auxStdDev;
-				nome_img = auxImagem->nome_img;
+				minStdDevImagem = auxImagem;
 			}
 			auxBlob = auxBlob->next;
 		}
 		auxImagem = auxImagem->next;
 	}
-	
-	printf("BLOB (%u,%u) com %u pixeis e media de desvio padrao (%f) da imagem [%s] e que tem menor DPadrao,\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col, minStdDevBlob->npixeis, minStdDev,nome_img);
+
+	printf("BLOB (%u,%u) com %u pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col,
+			minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
 }
 
 void destruirImagem(struct imagem *primeiraImagem) {

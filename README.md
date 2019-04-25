@@ -18,8 +18,8 @@
 - Pesquisa recursivamente todos os pixeis adjacentes a um dado pixel
 - Utiliza função **pesquisarPixelBlob()**
 
-### calcularZonas (Done)
-- Calcula e insere as zonas para cada imagem
+### calcularBlobs (Done)
+- Calcula e insere os blobs para cada imagem
 - Utiliza função **pesquisarPixeis**
 
 ### mostrarBlobs (Done)
@@ -29,9 +29,20 @@
 - Mostra todas as imagens na lista de imagens
 - Utiliza função **mostrarBlobs**
 
-### mostrarImagensComMaisZonas (Done)
-- Calcula e mostra a imagem com mais zonas
+### mostrarImagensComMaisBlobs (Done)
+- Calcula e mostra a imagem com mais blobs
 - Utiliza função **mostrarImagem**
+
+### determinarDesvioPadrao (Done)
+- Para todas as imagens e para cada blob das mesmas, calcula o desvio padrão de cada blob nos respetivos canais RGB
+
+### mediaDesvioPadrao (Done)
+- Passado um blob como parametro calcula a média dos desvios padroes dos canais rgb
+- return: valor do desvio padrão do blob
+
+### determinarBlobMenorDesvioPadraoImagem (Done)
+- Percorre todos os blobs 
+- Determina o blob com menor media de desvio padrao
 
 ### destruirBlob (Done)
 - Itera recursivamente por todos os blobs e dá free
@@ -40,10 +51,3 @@
 - Itera recursivamente por todas as imagens e dá free
 - Utiliza função **destruirBlob()**
 - Func de destruir imagens feita.
-
-### mediaDesvioPadrao (Done)
-- Passado um blob como parametro calcula a média dos desvios padroes dos canais rgb e devolve o valor.
-
-### determinarZonaMenorDesvioPadraoImagem (Done)
-- Percorre todos os blobs 
-- Determina o blob com menor media de desvio padrao
