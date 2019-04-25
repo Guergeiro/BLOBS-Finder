@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 				determinarDesvioPadrao(primeiraImagem);
 				break;
 			case 6:
-				//determinarZonaMenorDesvioPadraoImagem(void);
+				determinarZonaMenorDesvioPadraoImagem(primeiraImagem);
 				break;
 			case 0:
 				destruirImagem(primeiraImagem);
