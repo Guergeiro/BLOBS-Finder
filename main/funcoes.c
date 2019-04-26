@@ -168,16 +168,11 @@ void calcularBlobs(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d
 	}
 }
 
-void mostrarBlobs(struct blob *blob) {
+void mostrarBlobs(struct blob *blob, char *nomeImagem) {
 	if (blob->next) {
-		mostrarBlobs(blob->next);
+		mostrarBlobs(blob->next, nomeImagem);
 	}
-	printf("Blob Comeca\n");
-	struct pixel *aux = blob->primeiroPixel;
-	while (aux) {
-		printf("[%u][%u]%u %u %u\n", aux->row, aux->col, aux->r, aux->g, aux->b);
-		aux = aux->next;
-	}
+	printf("%s [%u][%u] %u Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis, blob->desvioRed, blob->desvioGreen, blob->desvioBlue);
 }
 
 void mostrarImagens(struct imagem *primeiraImagem) {
@@ -185,12 +180,13 @@ void mostrarImagens(struct imagem *primeiraImagem) {
 		// Não existem imagens
 		return;
 	}
+
 	struct imagem *aux = primeiraImagem;
+
 	while (aux) {
-		printf("[%s] - ", aux->nome_img);
-		printf("[row][col]r g b\n");
+		bubbleSort(aux->primeiroBlob);
 		if (aux->primeiroBlob) {
-			mostrarBlobs(aux->primeiroBlob);
+			mostrarBlobs(aux->primeiroBlob, aux->nome_img);
 		}
 		aux = aux->next;
 	}
@@ -213,8 +209,9 @@ void mostrarImagemComMaisBlobs(struct imagem *primeiraImagem) {
 		}
 		auxImagem = auxImagem->next;
 	}
+
 	if (maiorImagem->primeiroBlob) {
-		mostrarBlobs(maiorImagem->primeiroBlob);
+		//mostrarBlobs(maiorImagem->primeiroBlob);
 		printf("%s - %u blobs\n", maiorImagem->nome_img, maiorImagem->nblobs);
 	}
 }
@@ -304,6 +301,53 @@ void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 
 	printf("BLOB (%u,%u) com %u pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col,
 			minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
+}
+
+void swap(struct blob *a, struct blob *b) {
+	struct blob *aux = calloc(1, sizeof(struct blob));;
+	aux->desvioBlue = a->desvioBlue;
+	aux->desvioRed = a->desvioRed;
+	aux->desvioGreen = a->desvioGreen;
+	aux->npixeis = a->npixeis;
+	aux->primeiroPixel = a->primeiroPixel;
+
+	// primeira troca
+	a->desvioBlue = b->desvioBlue;
+	a->desvioRed = b->desvioRed;
+	a->desvioGreen = b->desvioGreen;
+	a->npixeis = b->npixeis;
+	a->primeiroPixel = b->primeiroPixel;
+
+	// Segunda troca
+	b->desvioBlue = aux->desvioBlue;
+	b->desvioRed = aux->desvioRed;
+	b->desvioGreen = aux->desvioGreen;
+	b->npixeis = aux->npixeis;
+	b->primeiroPixel = aux->primeiroPixel;
+	free(aux);
+}
+
+void bubbleSort(struct blob *start) {
+	int swapped, i;
+	struct blob *ptr1;
+	struct blob *lptr = NULL;
+
+	if (!start)
+		return;
+
+	do {
+		swapped = 0;
+		ptr1 = start;
+
+		while (ptr1->next != lptr) {
+			if (ptr1->npixeis > ptr1->next->npixeis) {
+				swap(ptr1, ptr1->next);
+				swapped = 1;
+			}
+			ptr1 = ptr1->next;
+		}
+		lptr = ptr1;
+	} while (swapped);
 }
 
 void destruirImagem(struct imagem *primeiraImagem) {
