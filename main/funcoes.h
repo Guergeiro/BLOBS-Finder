@@ -60,7 +60,7 @@ void calcularBlobs(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d
  * Mostra todos os blobs na lista de blobs
  * @param *blob contêm o ponteiro para o blob
  */
-void mostrarBlobs(struct blob *blob);
+void mostrarBlobs(struct blob *blob, char *nomeImagem);
 
 /**
  * Mostra todas as imagens na lista de imagens
@@ -99,4 +99,7 @@ void destruirImagem(struct imagem *primeiraImagem);
 
 void destruirBlob(struct blob *blob);
 
+void swap(struct blob *a, struct blob *b);
+
+void bubbleSort(struct blob *start);
 #endif /* FUNCOES_H_ */
