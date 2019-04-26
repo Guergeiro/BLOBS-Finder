@@ -92,6 +92,7 @@ double mediaDesvioPadrao(struct blob *blob);
 /**
  * Para todas as imagens, determina e mostra a imagem com menor desvio padrão blob
  * @param *primeiraImagem contêm o ponteiro para a primeira imagem da lista de imagens
+ * Utiliza a função @see mediaDesvioPadrao()
  */
 void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem);
 
