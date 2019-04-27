@@ -5,24 +5,24 @@
 #ifndef TIPOS_H_
 #define TIPOS_H_
 
-typedef unsigned int uint;
+typedef unsigned short ushort;
 
 struct pixel {
-	uint r, g, b;
-	uint row, col;
-	uint visitado;
+	ushort r, g, b;
+	ushort row, col;
+	ushort visitado;
 	struct pixel *next;
 };
 
 struct blob {
-	uint npixeis;
+	ushort npixeis;
 	double desvioRed, desvioGreen, desvioBlue;
 	struct blob *next;
 	struct pixel *primeiroPixel;
 };
 
 struct imagem {
-	uint nlinhas, ncolunas, ncanais, nblobs;
+	ushort nlinhas, ncolunas, ncanais, nblobs;
 	char *nome_img;
 	struct pixel **array_pixeis;
 	struct blob *primeiroBlob;

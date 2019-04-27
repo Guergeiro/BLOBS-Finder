@@ -20,7 +20,7 @@ struct imagem *lerFicheiro(char *nf);
  * @param pixel2 contêm as informações de um pixel
  * @return 1 caso diferentes, 0 caso iguais
  */
-int compararPixeis(const struct pixel pixel1, const struct pixel pixel2);
+ushort compararPixeis(const struct pixel pixel1, const struct pixel pixel2);
 
 /**
  * Pesquisa se um dado pixel existe nos blobs de uma imagem
@@ -30,7 +30,7 @@ int compararPixeis(const struct pixel pixel1, const struct pixel pixel2);
  * @return 1 caso exista, 0 caso não exista
  */
 
-int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
+ushort pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
 
 /**
  * Pesquisa todos os pixeis adjacentes numa imagem
@@ -44,7 +44,7 @@ int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
  * @param d contêm o valor de desvio que devemos considerar para todos os canais
  * @param *blob contêm ponteiro para o blob a que estamos adicionar, NULL caso seja o primeiro pixel a pesquisar
  */
-void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d, struct blob *blob);
+void pesquisarPixeis(struct imagem *imagem, ushort row, ushort col, ushort r, ushort g, ushort b, ushort d, struct blob *blob);
 
 /**
  * Calcula e insere os blobs para cada imagem
@@ -54,7 +54,7 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
  * @param b valor Blue a ser considerado para calcular um Blob
  * @param d valor Desvio a ser considerado para calcular um Blob
  */
-void calcularBlobs(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d);
+void calcularBlobs(struct imagem *primeiraImagem, ushort r, ushort g, ushort b, ushort d);
 
 /**
  * Mostra todos os blobs na lista de blobs

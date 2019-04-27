@@ -47,13 +47,13 @@ struct imagem *lerFicheiro(char *nf) {
 
 		// Creates array Pixeis
 		novaImg->array_pixeis = calloc(novaImg->nlinhas, sizeof(struct pixel *));
-		for (uint row = 0; row < novaImg->nlinhas; row++) {
+		for (ushort row = 0; row < novaImg->nlinhas; row++) {
 			novaImg->array_pixeis[row] = calloc(novaImg->ncolunas, sizeof(struct pixel));
 		}
 
 		// Populates array Pixeis
-		for (uint row = 0; row < novaImg->nlinhas; row++) {
-			for (uint col = 0; col < novaImg->ncolunas; col++) {
+		for (ushort row = 0; row < novaImg->nlinhas; row++) {
+			for (ushort col = 0; col < novaImg->ncolunas; col++) {
 				// Saves all pixel values
 				fgets(buf, BUFFER_SIZE, file);
 				novaImg->array_pixeis[row][col].r = atoi(buf);
@@ -75,11 +75,11 @@ struct imagem *lerFicheiro(char *nf) {
 	return auxImg;
 }
 
-int compararPixeis(const struct pixel pixel1, const struct pixel pixel2) {
+ushort compararPixeis(const struct pixel pixel1, const struct pixel pixel2) {
 	return (abs(pixel1.row - pixel2.row) || abs(pixel1.col - pixel2.col) || abs(pixel1.r - pixel2.r) || abs(pixel1.g - pixel2.g) || abs(pixel1.b - pixel2.b));
 }
 
-int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel) {
+ushort pesquisarPixelBlob(struct blob *blob, const struct pixel pixel) {
 	struct blob *aux_blob = blob;
 	struct pixel *aux_pixel;
 	while (aux_blob) {
@@ -95,7 +95,7 @@ int pesquisarPixelBlob(struct blob *blob, const struct pixel pixel) {
 	return 0;
 }
 
-void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, uint b, uint d, struct blob *blob) {
+void pesquisarPixeis(struct imagem *imagem, ushort row, ushort col, ushort r, ushort g, ushort b, ushort d, struct blob *blob) {
 	// If pixel was already visited
 	if (imagem->array_pixeis[row][col].visitado) {
 		return;
@@ -152,15 +152,15 @@ void pesquisarPixeis(struct imagem *imagem, uint row, uint col, uint r, uint g, 
 		pesquisarPixeis(imagem, row, col + 1, r, g, b, d, blob);
 }
 
-void calcularBlobs(struct imagem *primeiraImagem, uint r, uint g, uint b, uint d) {
+void calcularBlobs(struct imagem *primeiraImagem, ushort r, ushort g, ushort b, ushort d) {
 	if (!primeiraImagem) {
 		// Não existem imagens
 		return;
 	}
 	struct imagem *aux = primeiraImagem;
 	while (aux) {
-		for (uint row = 0; row < aux->nlinhas; row++) {
-			for (uint col = 0; col < aux->ncolunas; col++) {
+		for (ushort row = 0; row < aux->nlinhas; row++) {
+			for (ushort col = 0; col < aux->ncolunas; col++) {
 				pesquisarPixeis(aux, row, col, r, g, b, d, NULL);
 			}
 		}
@@ -172,7 +172,7 @@ void mostrarBlobs(struct blob *blob, char *nomeImagem) {
 	if (blob->next) {
 		mostrarBlobs(blob->next, nomeImagem);
 	}
-	printf("%s [%u][%u] %u Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis, blob->desvioRed,
+	printf("%s [%hu][%hu] %hu Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis, blob->desvioRed,
 			blob->desvioGreen, blob->desvioBlue);
 }
 
@@ -198,7 +198,7 @@ void mostrarImagemComMaisBlobs(struct imagem *primeiraImagem) {
 		return;
 	}
 	struct imagem *maiorImagem = NULL, *auxImagem = primeiraImagem;
-	uint somaMaior = 0, somaAux;
+	ushort somaMaior = 0, somaAux;
 	struct blob *blobAux = NULL;
 	while (auxImagem) {
 		for (somaAux = 0, blobAux = auxImagem->primeiroBlob; blobAux; somaAux++, blobAux = blobAux->next)
@@ -212,7 +212,7 @@ void mostrarImagemComMaisBlobs(struct imagem *primeiraImagem) {
 
 	if (maiorImagem->primeiroBlob) {
 		//mostrarBlobs(maiorImagem->primeiroBlob);
-		printf("%s - %u blobs\n", maiorImagem->nome_img, maiorImagem->nblobs);
+		printf("%s - %hu blobs\n", maiorImagem->nome_img, maiorImagem->nblobs);
 	}
 }
 
@@ -264,7 +264,7 @@ void determinarDesvioPadrao(struct imagem *primeiraImagem) {
 	while (auxImagem) {
 		auxBlob = auxImagem->primeiroBlob;
 		while (auxBlob) {
-			printf("%s - [%u,%u] - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->primeiroPixel->row, auxBlob->primeiroPixel->col, auxBlob->desvioRed,
+			printf("%s - [%hu,%hu] - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->primeiroPixel->row, auxBlob->primeiroPixel->col, auxBlob->desvioRed,
 					auxBlob->desvioGreen, auxBlob->desvioBlue);
 			auxBlob = auxBlob->next;
 		}
@@ -299,7 +299,7 @@ void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 		auxImagem = auxImagem->next;
 	}
 
-	printf("BLOB (%u,%u) com %u pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col,
+	printf("BLOB (%hu,%hu) com %hu pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col,
 			minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
 }
 
@@ -415,7 +415,7 @@ void destruirImagem(struct imagem *primeiraImagem) {
 		destruirImagem(primeiraImagem->next);
 		destruirBlob(primeiraImagem->primeiroBlob);
 
-		for (uint row = 0; row < primeiraImagem->nlinhas; row++)
+		for (ushort row = 0; row < primeiraImagem->nlinhas; row++)
 			free(primeiraImagem->array_pixeis[row]);
 		free(primeiraImagem->array_pixeis);
 

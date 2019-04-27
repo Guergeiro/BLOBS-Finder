@@ -8,7 +8,7 @@
 
 #include "funcoes.h"
 
-int menu() {
+short menu() {
 	printf("1 - Ler de Ficheiro\n");
 	printf("2 - Calcular Blobs\n");
 	printf("3 - Mostrar Blobs ordenados pelo numero de pixeis\n");
@@ -17,8 +17,8 @@ int menu() {
 	printf("6 - Determinar qual o blob com menor desvio padrão e a que imagem corresponde\n");
 	printf("0 - Sair \n");
 	printf("Qual a Opcao ");
-	int op;
-	scanf("%d", &op);
+	short op;
+	scanf("%hu", &op);
 	return op;
 }
 
@@ -42,12 +42,12 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	for (uint cont = 0; cont < argc; cont++)
+	for (ushort cont = 0; cont < argc; cont++)
 		printf("parametros[%d] = [%s]\n", cont, argv[cont]);
 
 	if (!strcmp(argv[7], "MENUS")) {
 		struct imagem *primeiraImagem = NULL;
-		uint op;
+		short op;
 		do {
 			op = menu();
 			switch (op) {
