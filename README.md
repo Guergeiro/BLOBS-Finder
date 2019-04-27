@@ -44,6 +44,21 @@
 - Percorre todos os blobs 
 - Determina o blob com menor media de desvio padrao
 
+### swapBlobs (Done)
+- Troca 2 blobs
+
+### sortBlobs (Done)
+- Ordena os blobs pelo número de pixeis (crescente)
+- Utiliza a função **swapBlobs()**
+
+### swapImagens (Done)
+- Troca 2 imagens
+
+### sortImagens (Done)
+- Ordena as imagens pelo número de blobs (crescente)
+- Utiliza a função **swapImagens**
+- Utiliza a funçao **sortBlobs**
+
 ### destruirBlob (Done)
 - Itera recursivamente por todos os blobs e dá free
 

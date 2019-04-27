@@ -18,13 +18,13 @@ struct imagem *lerFicheiro(char *nf);
  * Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
  * @param pixel1 contêm as informações de um pixel
  * @param pixel2 contêm as informações de um pixel
- * @return 0 caso diferentes, !0 caso iguais
+ * @return 1 caso diferentes, 0 caso iguais
  */
 int compararPixeis(const struct pixel pixel1, const struct pixel pixel2);
 
 /**
  * Pesquisa se um dado pixel existe nos blobs de uma imagem
- * Utiliza a função @see compararPixeis()
+ * @see compararPixeis()
  * @param *blob contêm ponteiro para o primeiro blob de uma imagem
  * @param pixel contêm as informações do pixel que se quer pesquisar
  * @return 1 caso exista, 0 caso não exista
@@ -64,14 +64,14 @@ void mostrarBlobs(struct blob *blob, char *nomeImagem);
 
 /**
  * Mostra todas as imagens na lista de imagens
- * Utiliza a função @see calcularZonas()
+ * @see calcularZonas()
  * @param *primeiraImagem contêm o pointeiro para a primeira imagem da lista de imagens
  */
 void mostrarImagens(struct imagem *primeiraImagem);
 
 /**
  * Mostra a imagem com mais blobs
- * Utiliza a função @see mostrarImagens()
+ * @see mostrarImagens()
  * @param *primeiraImagem contêm o pointeiro para a primeira imagem da lista de imagens
  */
 void mostrarImagemComMaisBlobs(struct imagem *primeiraImagem);
@@ -96,11 +96,37 @@ double mediaDesvioPadrao(struct blob *blob);
  */
 void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem);
 
+/**
+ * Troca 2 blobs
+ * @param *a contêm ponteiro para um blob
+ * @param *b contêm ponteiro para outro blob
+ */
+void swapBlobs(struct blob *a, struct blob *b);
+
+/**
+ * Ordena os blobs pelo número de pixeis (crescente)
+ * @see swapBlobs()
+ * @param *primeiroBlob contêm ponteiro para o primeiro blob da lista de blobs
+ */
+void sortBlobs(struct blob *primeiroBlob);
+
+/**
+ * Troca 2 imagens
+ * @param *a contêm ponteiro para uma imagem
+ * @param *b contêm ponteiro para outra imagem
+ */
+void swapImagens(struct imagem *a, struct imagem *b);
+
+/**
+ * Ordena as imagens pelo número de blobs (crescente)
+ * @see swapImagens()
+ * @see sortBlobs()
+ * @param *primeiraImagem contêm ponteiro para a primeira imagem da lista de imagens
+ */
+void sortImagens(struct imagem *primeiraImagem);
+
 void destruirImagem(struct imagem *primeiraImagem);
 
 void destruirBlob(struct blob *blob);
 
-void swap(struct blob *a, struct blob *b);
-
-void bubbleSort(struct blob *start);
 #endif /* FUNCOES_H_ */

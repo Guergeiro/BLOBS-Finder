@@ -11,7 +11,7 @@
 int menu() {
 	printf("1 - Ler de Ficheiro\n");
 	printf("2 - Calcular Blobs\n");
-	printf("3 - Calcular zonas ordenadas pelo numero de pixeis\n");
+	printf("3 - Mostrar Blobs ordenados pelo numero de pixeis\n");
 	printf("4 - Calcular imagem com mais blobs\n");
 	printf("5 - Determinar desvio padrão para todos os blobs calculados para cada imagem\n");
 	printf("6 - Determinar qual o blob com menor desvio padrão e a que imagem corresponde\n");
@@ -26,6 +26,8 @@ void testarMem(char **argv) {
 	while (1) {
 		struct imagem *primeiraImagem = lerFicheiro(argv[2]);
 		calcularBlobs(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		mostrarImagens(primeiraImagem);
+		sortImagens(primeiraImagem);
 		mostrarImagens(primeiraImagem);
 		mostrarImagemComMaisBlobs(primeiraImagem);
 		determinarDesvioPadrao(primeiraImagem);
@@ -57,7 +59,8 @@ int main(int argc, char **argv) {
 					mostrarImagens(primeiraImagem);
 					break;
 				case 3:
-
+					sortImagens(primeiraImagem);
+					mostrarImagens(primeiraImagem);
 					break;
 				case 4:
 					mostrarImagemComMaisBlobs(primeiraImagem);
@@ -78,9 +81,11 @@ int main(int argc, char **argv) {
 	} else if (!strcmp(argv[7], "ALL")) {
 		struct imagem *primeiraImagem = lerFicheiro(argv[2]);
 		calcularBlobs(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		mostrarImagens(primeiraImagem);
+		sortImagens(primeiraImagem);
+		mostrarImagens(primeiraImagem);
 		mostrarImagemComMaisBlobs(primeiraImagem);
 		determinarDesvioPadrao(primeiraImagem);
-		mostrarImagens(primeiraImagem);
 		determinarBlobMenorDesvioPadraoImagem(primeiraImagem);
 		destruirImagem(primeiraImagem);
 	} else if (!strcmp(argv[7], "MEM")) {
