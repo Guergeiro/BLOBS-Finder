@@ -81,11 +81,10 @@ int main(int argc, char **argv) {
 	} else if (!strcmp(argv[7], "ALL")) {
 		struct imagem *primeiraImagem = lerFicheiro(argv[2]);
 		calcularBlobs(primeiraImagem, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
-		mostrarImagens(primeiraImagem);
 		sortImagens(primeiraImagem);
+		determinarDesvioPadrao(primeiraImagem);
 		mostrarImagens(primeiraImagem);
 		mostrarImagemComMaisBlobs(primeiraImagem);
-		determinarDesvioPadrao(primeiraImagem);
 		determinarBlobMenorDesvioPadraoImagem(primeiraImagem);
 		destruirImagem(primeiraImagem);
 	} else if (!strcmp(argv[7], "MEM")) {
