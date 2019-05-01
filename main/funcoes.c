@@ -172,8 +172,8 @@ void mostrarBlobs(struct blob *blob, char *nomeImagem) {
 	if (blob->next) {
 		mostrarBlobs(blob->next, nomeImagem);
 	}
-	printf("%s [%hu][%hu] %hu Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis, blob->desvioRed,
-			blob->desvioGreen, blob->desvioBlue);
+	printf("%s [%hu][%hu] %hu Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis,
+			blob->desvioRed, blob->desvioGreen, blob->desvioBlue);
 }
 
 void mostrarImagens(struct imagem *primeiraImagem) {
@@ -299,8 +299,8 @@ void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 		auxImagem = auxImagem->next;
 	}
 
-	printf("BLOB (%hu,%hu) com %hu pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col,
-			minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
+	printf("BLOB (%hu,%hu) com %hu pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row,
+			minStdDevBlob->primeiroPixel->col, minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
 }
 
 void swapBlobs(struct blob *a, struct blob *b) {
@@ -410,24 +410,24 @@ void sortImagens(struct imagem *primeiraImagem) {
 	}
 }
 
-void destruirImagem(struct imagem *primeiraImagem) {
-	if (primeiraImagem) {
-		destruirImagem(primeiraImagem->next);
-		destruirBlob(primeiraImagem->primeiroBlob);
-
-		for (ushort row = 0; row < primeiraImagem->nlinhas; row++)
-			free(primeiraImagem->array_pixeis[row]);
-		free(primeiraImagem->array_pixeis);
-
-		free(primeiraImagem->nome_img);
-
-		free(primeiraImagem);
-	}
-}
-
 void destruirBlob(struct blob *blob) {
 	if (blob) {
 		destruirBlob(blob->next);
 		free(blob);
+	}
+}
+
+void destruirImagem(struct imagem *imagem) {
+	if (imagem) {
+		destruirImagem(imagem->next);
+		destruirBlob(imagem->primeiroBlob);
+
+		for (ushort row = 0; row < imagem->nlinhas; row++)
+			free(imagem->array_pixeis[row]);
+		free(imagem->array_pixeis);
+
+		free(imagem->nome_img);
+
+		free(imagem);
 	}
 }
