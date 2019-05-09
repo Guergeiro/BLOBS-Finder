@@ -14,8 +14,7 @@
  */
 struct imagem *lerFicheiro(char *nf);
 
-/**
- * Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
+/** Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
  * @param pixel1 contêm as informações de um pixel
  * @param pixel2 contêm as informações de um pixel
  * @return 1 caso diferentes, 0 caso iguais
@@ -59,6 +58,7 @@ void calcularBlobs(struct imagem *primeiraImagem, ushort r, ushort g, ushort b, 
 /**
  * Mostra todos os blobs na lista de blobs
  * @param *blob contêm o ponteiro para o blob
+ * @param *nomeImagem
  */
 void mostrarBlobs(struct blob *blob, char *nomeImagem);
 
