@@ -5,15 +5,6 @@
 - Lê ficheiro que contêm as imagens
 - return: Ponteiro para a primeira imagem da lista de imagens
 
-### compararPixeis (Done)
-- Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
-- return: 0 caso diferentes, !0 caso iguais
-
-### pesquisarPixelBlob (Done)
-- Pesquisa se um dado pixel existe nos blobs de uma imagem
-- Utiliza função **compararPixeis()**
-- return: 1 caso exista, 0 caso não exista
-
 ### pesquisarPixeis (Done)
 - Pesquisa recursivamente todos os pixeis adjacentes a um dado pixel
 - Utiliza função **pesquisarPixelBlob()**

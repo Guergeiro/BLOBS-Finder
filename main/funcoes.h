@@ -14,33 +14,8 @@
  */
 struct imagem *lerFicheiro(char *nf);
 
-<<<<<<< HEAD
-/** Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
- * @param pixel1 contêm as informações de um pixel
- * @param pixel2 contêm as informações de um pixel
-=======
-/**
- * Compara se 2 pixeis são exatamente iguais, quer nas coordenadas, quer nos valores rgb
- * @param pixel1 contém as informações de um pixel
- * @param pixel2 contém as informações de um pixel
->>>>>>> c0d8e403a34dbb700a5508a2f9ace1b4a006f00f
- * @return 1 caso diferentes, 0 caso iguais
- */
-ushort compararPixeis(const struct pixel pixel1, const struct pixel pixel2);
-
-/**
- * Pesquisa se um dado pixel existe nos blobs de uma imagem
- * @see compararPixeis()
- * @param *blob contém ponteiro para o primeiro blob de uma imagem
- * @param pixel contém as informações do pixel que se quer pesquisar
- * @return 1 caso exista, 0 caso não exista
- */
-
-ushort pesquisarPixelBlob(struct blob *blob, const struct pixel pixel);
-
 /**
  * Pesquisa todos os pixeis adjacentes numa imagem
- * Utiliza função @see pesquisarPixelBlob()
  * @param *imagem contém ponteiro para a imagem que estamos a tratar
  * @param row contém a linha do pixel atual
  * @param col contém a coluna do pixel atual
@@ -64,12 +39,8 @@ void calcularBlobs(struct imagem *imagem, ushort r, ushort g, ushort b, ushort d
 
 /**
  * Mostra todos os blobs na lista de blobs
-<<<<<<< HEAD
  * @param *blob contêm o ponteiro para o blob
  * @param *nomeImagem
-=======
- * @param *blob contém o ponteiro para o blob
->>>>>>> c0d8e403a34dbb700a5508a2f9ace1b4a006f00f
  */
 void mostrarBlobs(struct blob *blob, char *nomeImagem);
 

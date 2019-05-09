@@ -75,26 +75,6 @@ struct imagem *lerFicheiro(char *nf) {
 	return auxImg;
 }
 
-ushort compararPixeis(const struct pixel pixel1, const struct pixel pixel2) {
-	return (abs(pixel1.row - pixel2.row) || abs(pixel1.col - pixel2.col) || abs(pixel1.r - pixel2.r) || abs(pixel1.g - pixel2.g) || abs(pixel1.b - pixel2.b));
-}
-
-ushort pesquisarPixelBlob(struct blob *blob, const struct pixel pixel) {
-	struct blob *aux_blob = blob;
-	struct pixel *aux_pixel;
-	while (aux_blob) {
-		aux_pixel = aux_blob->primeiroPixel;
-		while (aux_pixel) {
-			if (!compararPixeis(*aux_pixel, pixel)) {
-				return 1;
-			}
-			aux_pixel = aux_pixel->next;
-		}
-		aux_blob = aux_blob->next;
-	}
-	return 0;
-}
-
 void pesquisarPixeis(struct imagem *imagem, ushort row, ushort col, ushort r, ushort g, ushort b, ushort d, struct blob *blob) {
 	// If pixel was already visited
 	if (imagem->array_pixeis[row][col].visitado) {
@@ -113,31 +93,29 @@ void pesquisarPixeis(struct imagem *imagem, ushort row, ushort col, ushort r, us
 		return;
 	}
 
-	if (!pesquisarPixelBlob(imagem->primeiroBlob, imagem->array_pixeis[row][col])) {
-		// Não está em nenhum blob/não existem blobs.
-		if (blob) {
-			/*
-			 * Estamos perante um pesquisa de profundidade de recursividade.
-			 * Adicionamos o pixel ao blob (inicio).
-			 */
-			imagem->array_pixeis[row][col].next = blob->primeiroPixel;
-			blob->primeiroPixel = &imagem->array_pixeis[row][col];
-		} else {
-			/*
-			 * Estamos perante a primeira iteração da recursividade.
-			 * Cria-se um blob para os pixeis seguintes.
-			 */
-			blob = calloc(1, sizeof(struct blob));
-			blob->primeiroPixel = &imagem->array_pixeis[row][col];
-			if (imagem->primeiroBlob) {
-				// Já existe um blob, insere no inicio
-				blob->next = imagem->primeiroBlob;
-			}
-			imagem->primeiroBlob = blob;
-			imagem->nblobs++;
+	if (blob) {
+		/*
+		 * Estamos perante um pesquisa de profundidade de recursividade.
+		 * Adicionamos o pixel ao blob (inicio).
+		 */
+		imagem->array_pixeis[row][col].next = blob->primeiroPixel;
+		blob->primeiroPixel = &imagem->array_pixeis[row][col];
+	} else {
+		/*
+		 * Estamos perante a primeira iteração da recursividade.
+		 * Cria-se um blob para os pixeis seguintes.
+		 */
+		blob = calloc(1, sizeof(struct blob));
+		blob->primeiroPixel = &imagem->array_pixeis[row][col];
+		if (imagem->primeiroBlob) {
+			// Já existe um blob, insere no inicio
+			blob->next = imagem->primeiroBlob;
 		}
-		blob->npixeis++;
+		imagem->primeiroBlob = blob;
+		imagem->nblobs++;
 	}
+	blob->npixeis++;
+
 	// Torna pixel já visitado
 	imagem->array_pixeis[row][col].visitado = 1;
 
@@ -172,8 +150,7 @@ void mostrarBlobs(struct blob *blob, char *nomeImagem) {
 	if (blob->next) {
 		mostrarBlobs(blob->next, nomeImagem);
 	}
-	printf("%s [%hu][%hu] %hu Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis,
-			blob->desvioRed, blob->desvioGreen, blob->desvioBlue);
+	printf("%s [%hu][%hu] %hu Pixeis e Desvio Padrao (%f,%f,%f)\n", nomeImagem, blob->primeiroPixel->row, blob->primeiroPixel->col, blob->npixeis, blob->desvioRed, blob->desvioGreen, blob->desvioBlue);
 }
 
 void mostrarImagens(struct imagem *primeiraImagem) {
@@ -264,8 +241,7 @@ void determinarDesvioPadrao(struct imagem *primeiraImagem) {
 	while (auxImagem) {
 		auxBlob = auxImagem->primeiroBlob;
 		while (auxBlob) {
-			printf("%s - [%hu,%hu] - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->primeiroPixel->row, auxBlob->primeiroPixel->col, auxBlob->desvioRed,
-					auxBlob->desvioGreen, auxBlob->desvioBlue);
+			printf("%s - [%hu,%hu] - (%lf, %lf, %lf)\n", auxImagem->nome_img, auxBlob->primeiroPixel->row, auxBlob->primeiroPixel->col, auxBlob->desvioRed, auxBlob->desvioGreen, auxBlob->desvioBlue);
 			auxBlob = auxBlob->next;
 		}
 		auxImagem = auxImagem->next;
@@ -299,8 +275,7 @@ void determinarBlobMenorDesvioPadraoImagem(struct imagem *primeiraImagem) {
 		auxImagem = auxImagem->next;
 	}
 
-	printf("BLOB (%hu,%hu) com %hu pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row,
-			minStdDevBlob->primeiroPixel->col, minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
+	printf("BLOB (%hu,%hu) com %hu pixeis e media de desvio padrao (%f) da imagem [%s].\n", minStdDevBlob->primeiroPixel->row, minStdDevBlob->primeiroPixel->col, minStdDevBlob->npixeis, minStdDev, minStdDevImagem->nome_img);
 }
 
 void swapBlobs(struct blob *a, struct blob *b) {
